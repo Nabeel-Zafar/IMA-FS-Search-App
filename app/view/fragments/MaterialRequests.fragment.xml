@@ -1,0 +1,370 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout">
+    
+    <VBox width="100%">
+        <!-- Header Section -->
+        <Panel headerText="Material Creation Requests" class="sapUiTinyMargin">
+            <content>
+                <l:HorizontalLayout allowWrapping="true" class="sapUiTinyMargin">
+                    <l:content>
+                        <Label text="Filter by Status:" class="sapUiTinyMarginEnd"/>
+                        <Select
+                            id="statusFilter"
+                            selectedKey="all"
+                            change="onStatusFilterChange"
+                            width="200px"
+                            class="sapUiTinyMarginEnd">
+                            <core:Item key="all" text="All Statuses"/>
+                             <core:Item key="pendingApproval" text="Pending Approval"/>
+                             <core:Item key="pendingIMA" text="Pending IMA"/>
+                        </Select>
+                        <Button
+                            text="Refresh"
+                            icon="sap-icon://refresh"
+                            press="onRefreshRequests"
+                            class="sapUiTinyMarginEnd"/>
+                        <Button
+                            text="Sync Requests"
+                            icon="sap-icon://synchronize"
+                            press="onSyncRequests"
+                            class="sapUiTinyMarginEnd"/>
+                    </l:content>
+                </l:HorizontalLayout>
+            </content>
+        </Panel>
+
+                <!-- Summary Cards -->
+        <l:Grid defaultSpan="XL3 L3 M6 S12" class="sapUiTinyMargin">
+            <l:content>
+                <!-- <NumericContent
+                    value="{materialRequestsModel>/pendingRequests.length}"
+                    scale="Total Requests"
+                    valueColor="Neutral"
+                    icon="sap-icon://document"/> -->
+                
+                <NumericContent
+                    value="{materialRequestsModel>/requestedCount}"
+                    scale="Pending"
+                    valueColor="Error"
+                    icon="sap-icon://pending"/>
+                
+                <NumericContent
+                    value="{materialRequestsModel>/emailSentCount}"
+                    scale="Email Sent"
+                    valueColor="Neutral"
+                    icon="sap-icon://email"/>
+                
+                <NumericContent
+                    value="{materialRequestsModel>/approvedCount}"
+                    scale="Approved"
+                    valueColor="Good"
+                    icon="sap-icon://accept"/>
+            </l:content>
+        </l:Grid>
+
+        <!-- <Panel headerText="Enter New Material Request Details" class="sapUiTinyMargin">
+            <content>
+                <VBox class="sapUiMediumMargin">
+                    <l:Grid defaultSpan="XL6 L6 M12 S12" class="sapUiTinyMarginBottom">
+                        <l:content>
+                            <VBox class="sapUiTinyMarginEnd">
+                                <Label text="Material Name *" class="sapUiTinyMarginBottom"/>
+                                <Input
+                                    id="newMaterialName"
+                                    placeholder="Enter material name"
+                                    class="sapUiTinyMarginBottom"/>
+                                
+                                <Label text="Material Description *" class="sapUiTinyMarginBottom"/>
+                                <TextArea
+                                    id="newMaterialDescription"
+                                    placeholder="Enter material description"
+                                    rows="3"
+                                    class="sapUiTinyMarginBottom"/>
+                                
+                                <Label text="Material Category *" class="sapUiTinyMarginBottom"/>
+                                <Select
+                                    id="newMaterialCategory"
+                                    selectedKey="Metals"
+                                    class="sapUiTinyMarginBottom">
+                                    <core:Item key="Metals" text="Metals"/>
+                                    <core:Item key="Polymers" text="Polymers"/>
+                                    <core:Item key="Ceramics" text="Ceramics"/>
+                                    <core:Item key="Composites" text="Composites"/>
+                                    <core:Item key="Other" text="Other"/>
+                                </Select>
+                            </VBox>
+                            
+                            <VBox>
+                                <Label text="Vendor" class="sapUiTinyMarginBottom"/>
+                                <Select
+                                    id="newMaterialVendor"
+                                    selectedKey="VENDOR001"
+                                    class="sapUiTinyMarginBottom">
+                                    <core:Item key="VENDOR001" text="SteelCorp Industries"/>
+                                    <core:Item key="VENDOR002" text="PolyTech Solutions"/>
+                                    <core:Item key="VENDOR003" text="CeramicWorks Ltd"/>
+                                    <core:Item key="VENDOR004" text="CarbonFiber Pro"/>
+                                </Select>
+                                
+                                <Label text="Plant" class="sapUiTinyMarginBottom"/>
+                                <Select
+                                    id="newMaterialPlant"
+                                    selectedKey="PLANT001"
+                                    class="sapUiTinyMarginBottom">
+                                    <core:Item key="PLANT001" text="Main Production Plant"/>
+                                    <core:Item key="PLANT002" text="Aerospace Division"/>
+                                    <core:Item key="PLANT003" text="Medical Equipment Plant"/>
+                                </Select>
+                                
+                                <HBox justifyContent="End" class="sapUiMediumMarginTop">
+                                    <Button
+                                        text="Submit Request"
+                                        type="Accept"
+                                        press="onSubmitNewMaterialRequest"
+                                        class="sapUiTinyMarginEnd"/>
+                                    <Button
+                                        text="Clear Form"
+                                        press="onClearNewMaterialForm"/>
+                                </HBox>
+                            </VBox>
+                        </l:content>
+                    </l:Grid>
+                </VBox>
+            </content>
+        </Panel> -->
+
+        <!-- Section 2: Requestor Contract Details -->
+        <!-- <Panel headerText="Requestor Contract Details" class="sapUiTinyMargin">
+            <content>
+                <VBox class="sapUiMediumMargin">
+                    <l:Grid defaultSpan="XL6 L6 M12 S12" class="sapUiTinyMarginBottom">
+                        <l:content>
+                            <VBox class="sapUiTinyMarginEnd">
+                                <Label text="First Name *" class="sapUiTinyMarginBottom"/>
+                                <Input
+                                    id="requestorFirstName"
+                                    placeholder="Enter first name"
+                                    class="sapUiTinyMarginBottom"/>
+                                
+                                <Label text="Last Name *" class="sapUiTinyMarginBottom"/>
+                                <Input
+                                    id="requestorLastName"
+                                    placeholder="Enter last name"
+                                    class="sapUiTinyMarginBottom"/>
+                            </VBox>
+                            
+                            <VBox>
+                                <Label text="Email Address *" class="sapUiTinyMarginBottom"/>
+                                <Input
+                                    id="requestorEmail"
+                                    placeholder="Enter email address"
+                                    type="Email"
+                                    class="sapUiTinyMarginBottom"/>
+                                
+                                <HBox justifyContent="End" class="sapUiMediumMarginTop">
+                                    <Button
+                                        text="Update Requestor Details"
+                                        type="Emphasized"
+                                        press="onUpdateRequestorDetails"
+                                        class="sapUiTinyMarginEnd"/>
+                                    <Button
+                                        text="Clear Form"
+                                        press="onClearRequestorForm"/>
+                                </HBox>
+                            </VBox>
+                        </l:content>
+                    </l:Grid>
+                </VBox>
+            </content>
+        </Panel> -->
+
+        <!-- Requests Table -->
+        <Panel headerText="Requests List" class="sapUiTinyMargin">
+            <content>
+                <Table
+                    id="requestsTable"
+                    items="{materialRequestsModel>/pendingRequests}"
+                    class="sapUiTinyMarginTop"
+                    width="100%">
+                    <columns>
+                        <Column width="15%">
+                            <Text text="Material Name"/>
+                        </Column>
+                        <Column width="20%">
+                            <Text text="Description"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Vendor"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Plant"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Status"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Requestor"/>
+                        </Column>
+                        <Column width="10%">
+                            <Text text="Created Date"/>
+                        </Column>
+                        <Column width="15%">
+                            <Text text="Actions"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem>
+                            <cells>
+                                <Text text="{materialRequestsModel>materialName}"/>
+                                <Text text="{materialRequestsModel>materialDescription}"/>
+                                <Text text="{materialRequestsModel>vendor}"/>
+                                <Text text="{materialRequestsModel>plant}"/>
+                                 <ObjectStatus
+                                     text="{materialRequestsModel>status}"
+                                     state="{= ${materialRequestsModel>status} === 'pendingIMA' ? 'Warning' : 'Error'}"/>
+                                <Text text="{materialRequestsModel>firstName} {materialRequestsModel>lastName}"/>
+                                <Text text="{path: 'materialRequestsModel>createdAt', formatter: '.formatDate'}"/>
+                                <VBox alignItems="Center" class="sapUiTinyMargin">
+                                    <Button
+                                        text="Send Email to IMA"
+                                        type="Accept"
+                                        press="onSendEmailToIMA"
+                                        enabled="{= ${materialRequestsModel>status} === 'pendingApproval'}"
+                                        width="100%"
+                                        class="sapUiTinyMarginBottom"
+                                        icon="sap-icon://email"/>
+                                    <Button
+                                        text="Close Request"
+                                        type="Emphasized"
+                                        press="onCloseRequest"
+                                        enabled="{= ${materialRequestsModel>status} === 'pendingIMA'}"
+                                        width="100%"
+                                        class="sapUiTinyMarginBottom"
+                                        icon="sap-icon://accept"/>
+                                    <Button
+                                        text="View Details"
+                                        type="Transparent"
+                                        press="onViewRequestDetails"
+                                        width="100%"
+                                        icon="sap-icon://detail-view"/>
+                                </VBox>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </content>
+        </Panel>
+
+
+
+        <!-- Request Details Dialog -->
+        <Dialog
+            id="requestDetailsDialog"
+            title="Request Details"
+            contentWidth="700px"
+            contentHeight="600px">
+            <content>
+                <VBox class="sapUiMediumMargin">
+                    <VBox class="sapUiTinyMarginBottom">
+                        <Label text="Material Name" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>materialName}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Description" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>materialDescription}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Vendor" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>vendor}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Plant" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>plant}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Status" class="sapUiTinyMarginBottom"/>
+                         <ObjectStatus text="{materialRequestsModel>status}" state="{= ${materialRequestsModel>status} === 'pendingIMA' ? 'Warning' : ${materialRequestsModel>status} === 'completedByIMA' ? 'Success' : 'Error'}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Material Number" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>materialNumber}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Created By" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>createdBy}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Created Date" class="sapUiTinyMarginBottom"/>
+                        <Text text="{path: 'materialRequestsModel>createdAt', formatter: '.formatDate'}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Modified By" class="sapUiTinyMarginBottom"/>
+                        <Text text="{materialRequestsModel>modifiedBy}" class="sapUiTinyMarginBottom"/>
+                        
+                        <Label text="Modified Date" class="sapUiTinyMarginBottom"/>
+                        <Text text="{path: 'materialRequestsModel>modifiedAt', formatter: '.formatDate'}" class="sapUiTinyMarginBottom"/>
+                        
+                        <!-- Requestor Details -->
+                        <Panel headerText="Requestor Details" class="sapUiMediumMarginTop" expandable="false">
+                            <content>
+                                <VBox class="sapUiMediumMargin">
+                                    <Label text="First Name" class="sapUiTinyMarginBottom"/>
+                                    <Text text="{materialRequestsModel>firstName}" class="sapUiTinyMarginBottom"/>
+                                    
+                                    <Label text="Last Name" class="sapUiTinyMarginBottom"/>
+                                    <Text text="{materialRequestsModel>lastName}" class="sapUiTinyMarginBottom"/>
+                                    
+                                    <Label text="Email" class="sapUiTinyMarginBottom"/>
+                                    <Text text="{materialRequestsModel>email}" class="sapUiTinyMarginBottom"/>
+                                </VBox>
+                            </content>
+                        </Panel>
+                    </VBox>
+                </VBox>
+            </content>
+            <buttons>
+                <Button text="Close" press="onCloseRequestDetails"/>
+            </buttons>
+        </Dialog>
+
+        <!-- Confirmation Dialog for Send Email -->
+        <Dialog
+            id="actionConfirmDialog"
+            title="Confirm Action"
+            type="Message"
+            contentWidth="400px">
+            <content>
+                <Text id="actionConfirmText" text=""/>
+            </content>
+            <buttons>
+                <Button text="Cancel" press="onCancelAction"/>
+                <Button text="Confirm" type="Emphasized" press="onConfirmAction"/>
+            </buttons>
+        </Dialog>
+
+        <!-- Material Number Input Dialog for Close Request -->
+        <Dialog
+            id="materialNumberDialog"
+            title="Close Request - Enter Material Number"
+            contentWidth="500px"
+            contentHeight="300px">
+            <content>
+                <VBox class="sapUiLargeMargin">
+                    <Text text="Please enter the material number to close this request and mark it as approved:" class="sapUiMediumMarginBottom"/>
+                    
+                    <VBox class="sapUiMediumMarginBottom">
+                        <Label text="Material Number *" required="true" class="sapUiSmallMarginBottom"/>
+                        <Input 
+                            id="materialNumberInput" 
+                            placeholder="Enter material number (e.g., MAT12345)" 
+                            width="100%"
+                            class="sapUiMediumMarginBottom"/>
+                    </VBox>
+                    
+                    <MessageStrip 
+                        text="Once you enter the material number and confirm, this request will be marked as approved and will no longer appear in your pending requests list."
+                        type="Information"
+                        class="sapUiMediumMarginBottom"/>
+                </VBox>
+            </content>
+            <buttons>
+                <Button text="Cancel" press="onCancelMaterialNumberDialog"/>
+                <Button text="Close Request" type="Accept" press="onConfirmMaterialNumber" icon="sap-icon://accept"/>
+            </buttons>
+        </Dialog>
+    </VBox>
+</core:FragmentDefinition>
