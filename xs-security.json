@@ -1,0 +1,64 @@
+{
+  "xsappname": "ima-app",
+  "tenant-mode": "dedicated",
+  "description": "Security profile for IMA Material Management System",
+  "scopes": [
+    {
+      "name": "uaa.user",
+      "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.MaterialRequestRead",
+      "description": "Read material requests"
+    },
+    {
+      "name": "$XSAPPNAME.MaterialRequestWrite",
+      "description": "Create and update material requests"
+    },
+    {
+      "name": "$XSAPPNAME.MaterialRequestApprove",
+      "description": "Approve material requests"
+    },
+    {
+      "name": "$XSAPPNAME.IMAAnalyst",
+      "description": "IMA Analyst role"
+    }
+  ],
+  "attributes": [
+    {
+      "name": "Plant",
+      "description": "Plant assignment",
+      "valueType": "string"
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Requester",
+      "description": "Material Request Requester",
+      "scope-references": [
+        "uaa.user",
+        "$XSAPPNAME.MaterialRequestRead",
+        "$XSAPPNAME.MaterialRequestWrite"
+      ]
+    },
+    {
+      "name": "Approver",
+      "description": "Material Request Approver", 
+      "scope-references": [
+        "uaa.user",
+        "$XSAPPNAME.MaterialRequestRead",
+        "$XSAPPNAME.MaterialRequestApprove"
+      ]
+    },
+    {
+      "name": "IMAAnalyst",
+      "description": "IMA Analyst",
+      "scope-references": [
+        "uaa.user",
+        "$XSAPPNAME.MaterialRequestRead",
+        "$XSAPPNAME.MaterialRequestWrite",
+        "$XSAPPNAME.IMAAnalyst"
+      ]
+    }
+  ]
+}

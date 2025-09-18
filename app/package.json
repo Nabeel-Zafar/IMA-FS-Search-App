@@ -1,0 +1,20 @@
+{
+  "name": "ima-app-ui",
+  "version": "1.0.0",
+  "description": "IMA Material Management System - UI5 Frontend",
+  "private": true,
+  "devDependencies": {
+    "@sap/ui5-builder-webide-extension": "^1.1.9",
+    "@ui5/cli": "^3.0.0"
+  },
+  "scripts": {
+    "build": "ui5 build --dest dist",
+    "build:cf": "ui5 build preload --dest dist",
+    "start": "ui5 serve --port 8080"
+  },
+  "ui5": {
+    "dependencies": [
+      "@sap/ui5-builder-webide-extension"
+    ]
+  }
+}

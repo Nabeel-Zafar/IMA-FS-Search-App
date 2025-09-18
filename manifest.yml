@@ -1,0 +1,14 @@
+---
+applications:
+- name: ima-app
+  random-route: true
+  path: .
+  memory: 512M
+  buildpacks:
+    - nodejs_buildpack
+  env:
+    NODE_ENV: production
+  services:
+    - ima-hana-db
+    - ima-xsuaa
+  command: npm start

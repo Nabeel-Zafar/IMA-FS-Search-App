@@ -1,0 +1,136 @@
+_schema-version: '3.1'
+ID: ima-app
+version: 1.0.0
+description: IMA Material Management System
+parameters:
+  enable-parallel-deployments: true
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+
+modules:
+  # --------------------- SERVER MODULE ------------------------
+  - name: ima-app-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+      readiness-health-check-type: http
+      readiness-health-check-http-endpoint: /health
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: ima-app-db
+      - name: ima-app-xsuaa
+
+  # --------------------- DATABASE DEPLOYER MODULE ------------
+  - name: ima-app-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    requires:
+      - name: ima-app-db
+
+  # --------------------- DESTINATION CONTENT MODULE ----------
+  - name: ima-app-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: ima-app-destination-service
+        parameters:
+          content-target: true
+      - name: ima-app-html5-repo-host
+        parameters:
+          service-key:
+            name: ima-app-html5-repo-host-key
+      - name: ima-app-xsuaa
+        parameters:
+          service-key:
+            name: ima-app-xsuaa-key
+    parameters:
+      content:
+        instance:
+          destinations:
+            - Name: ima_app_html5_repo_host
+              ServiceInstanceName: ima-app-html5-repo-host
+              ServiceKeyName: ima-app-html5-repo-host-key
+              sap.cloud.service: ima-app
+            - Authentication: OAuth2UserTokenExchange
+              Name: ima_app_xsuaa
+              ServiceInstanceName: ima-app-xsuaa
+              ServiceKeyName: ima-app-xsuaa-key
+              sap.cloud.service: ima-app
+          existing_destinations_policy: update
+    build-parameters:
+      no-source: true
+
+  # --------------------- APP CONTENT MODULE -------------------
+  - name: ima-app-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: ima-app-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - imaapp.zip
+          name: imaapp
+          target-path: resources/
+
+  # --------------------- UI MODULE ----------------------------
+  - name: imaapp
+    type: html5
+    path: app
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+resources:
+  # --------------------- DATABASE HDI CONTAINER --------------
+  - name: ima-app-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-service-name: ${service-name}
+
+  # --------------------- XSUAA SERVICE ------------------------
+  - name: ima-app-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: ima-app-${org}-${space}
+        tenant-mode: dedicated
+
+  # --------------------- DESTINATION SERVICE ------------------
+  - name: ima-app-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  # --------------------- HTML5 REPOSITORY ---------------------
+  - name: ima-app-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
