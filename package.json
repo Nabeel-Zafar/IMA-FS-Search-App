@@ -1,13 +1,13 @@
 {
   "name": "ima-search-app-be",
   "version": "1.0.0",
-  "description": "IMA Material Management System - CAP backend with HANA DB",
+  "description": "IMA Material Management System - CAP backend with PostgreSQL",
   "repository": "<Add your repository here>",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
     "@sap/cds": "^9",
-    "@sap/cds-hana": "^2",
+    "@sap/cds-pg": "^1",
     "@sap/xssec": "^4",
     "@sap/audit-logging": "^5",
     "cors": "^2.8.5",
@@ -26,13 +26,13 @@
     "start": "cds-serve",
     "watch": "cds watch",
     "build": "cds build",
-    "deploy": "cds deploy --to hana",
+    "deploy": "cds deploy --to postgres",
     "cf-deploy": "cf push"
   },
   "cds": {
     "requires": {
       "db": {
-        "kind": "hana-cloud",
+        "kind": "postgres",
         "[development]": {
           "kind": "sqlite",
           "credentials": {
@@ -43,9 +43,6 @@
       "auth": {
         "kind": "xsuaa"
       }
-    },
-    "hana": {
-      "deploy-format": "hdbtable"
     }
   }
 }

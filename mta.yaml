@@ -33,7 +33,7 @@ modules:
 
   # --------------------- DATABASE DEPLOYER MODULE ------------
   - name: ima-app-db-deployer
-    type: hdb
+    type: nodejs
     path: gen/db
     parameters:
       buildpack: nodejs_buildpack
@@ -101,14 +101,12 @@ modules:
       supported-platforms: []
 
 resources:
-  # --------------------- DATABASE HDI CONTAINER --------------
+  # --------------------- POSTGRESQL DATABASE --------------
   - name: ima-app-db
-    type: com.sap.xs.hdi-container
+    type: org.cloudfoundry.managed-service
     parameters:
-      service: hana
-      service-plan: hdi-shared
-    properties:
-      hdi-service-name: ${service-name}
+      service: postgresql
+      service-plan: v9.4-dev
 
   # --------------------- XSUAA SERVICE ------------------------
   - name: ima-app-xsuaa

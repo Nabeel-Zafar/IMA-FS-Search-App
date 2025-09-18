@@ -11,20 +11,8 @@ entity MaterialRequests : cuid, managed, temporal {
   firstName           : String(50)  @title: 'First Name' @mandatory;
   lastName            : String(50)  @title: 'Last Name' @mandatory;
   email               : String(100) @title: 'Email' @mandatory;
-  status              : String(20)  @title: 'Status' @mandatory 
-                        @assert.range enum {
-                          pendingApproval = 'Pending Approval';
-                          pendingIMA = 'Pending IMA';
-                          completedByIMA = 'Completed by IMA';
-                          rejected = 'Rejected';
-                        } default 'pendingApproval';
+  status              : String(20)  @title: 'Status' @mandatory default 'pendingApproval';
   materialNumber      : String(50)  @title: 'Material Number';
   approverComments    : String(500) @title: 'Approver Comments';
-  requestPriority     : String(10)  @title: 'Priority'
-                        @assert.range enum {
-                          low = 'Low';
-                          medium = 'Medium';
-                          high = 'High';
-                          urgent = 'Urgent';
-                        } default 'medium';
+  requestPriority     : String(10)  @title: 'Priority' default 'medium';
 } 

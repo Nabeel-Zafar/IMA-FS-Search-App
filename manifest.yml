@@ -9,6 +9,6 @@ applications:
   env:
     NODE_ENV: production
   services:
-    - ima-hana-db
-    - ima-xsuaa
+    - ima-app-db
+    - ima-app-xsuaa
   command: npm start
